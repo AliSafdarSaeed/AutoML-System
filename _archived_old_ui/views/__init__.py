@@ -1,5 +1,5 @@
 """
-pages/__init__.py - Page modules
+views/__init__.py - Page modules
 """
 
 from .page_upload_eda import page_upload_eda

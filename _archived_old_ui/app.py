@@ -7,7 +7,7 @@ import streamlit as st
 from pathlib import Path
 
 # Import page modules
-from pages import page_upload_eda, page_preprocessing, page_training, page_report
+from views import page_upload_eda, page_preprocessing, page_training, page_report
 from sidebar import render_sidebar
 
 
