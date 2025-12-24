@@ -173,43 +173,54 @@ def get_class_imbalance_recommendation(
 
 
 def get_scaling_recommendation(
-    has_tree_models: bool,
-    has_linear_models: bool,
-    feature_ranges_vary: bool = True
+    has_tree_models: bool = True,
+    has_linear_models: bool = True,
+    feature_ranges_vary: bool = True,
+    has_outliers: bool = False,
+    num_features: int = 0
 ) -> Tuple[str, str, str]:
     """
-    Generate recommendation for feature scaling.
+    Generate recommendation for feature scaling based on dataset and model characteristics.
     
     Args:
         has_tree_models: Whether tree-based models are selected
         has_linear_models: Whether linear models are selected
         feature_ranges_vary: Whether features have different scales
+        has_outliers: Whether the dataset has significant outliers
+        num_features: Number of numeric features
     
     Returns:
         Tuple of (recommendation, reasoning, suggested_method)
     """
-    if not feature_ranges_vary:
+    if not feature_ranges_vary and num_features > 0:
         return (
             "✅ **No Scaling Needed**: Features already on similar scales",
-            "Your features have similar ranges. Scaling is optional and won't significantly impact performance.",
+            "Your features have similar value ranges. Scaling is optional and won't significantly impact model performance. Tree-based models don't require scaling at all.",
             "None"
+        )
+    
+    if has_outliers:
+        return (
+            "💡 **Recommended**: Use **RobustScaler** (IQR-based normalization)",
+            "Your data contains outliers that could skew StandardScaler results. RobustScaler uses the interquartile range (IQR) instead of mean/std, making it robust to extreme values while still normalizing your features.",
+            "robust"
         )
     
     if has_tree_models and not has_linear_models:
         return (
-            "💡 **Optional**: Tree models don't require scaling",
-            "Decision trees and Random Forests are scale-invariant. However, if you plan to compare feature importance or add linear models later, consider **StandardScaler**.",
+            "� **Optional**: Tree models don't require scaling",
+            "Decision Trees, Random Forest, and Gradient Boosting are scale-invariant algorithms. They split based on feature thresholds, not magnitudes. Scaling won't hurt but isn't necessary.",
             "None"
         )
-    elif has_linear_models or not has_tree_models:
+    elif has_linear_models:
         return (
-            "💡 **Recommended**: Use **StandardScaler** (z-score normalization)",
-            "Linear models, SVM, and neural networks are sensitive to feature scales. StandardScaler (mean=0, std=1) is the most common choice and works well for normally distributed features.",
+            "💡 **Recommended**: Use **StandardScaler** (Z-score normalization)",
+            "Linear models (Logistic Regression, SVM) are sensitive to feature scales. StandardScaler transforms features to have mean=0 and std=1, ensuring all features contribute equally to the model. This is the most commonly used scaling method.",
             "standard"
         )
     else:
         return (
-            "💡 **Recommended**: Use **StandardScaler** for mixed models",
-            "You're using both tree and linear models. StandardScaler won't hurt tree models and will help linear models perform better.",
+            "💡 **Recommended**: Use **StandardScaler** for general use",
+            "StandardScaler (Z-score normalization) is a safe default choice. It centers data around zero and scales to unit variance, which works well with most algorithms including neural networks and gradient-based methods.",
             "standard"
         )

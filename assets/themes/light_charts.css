@@ -1,0 +1,70 @@
+/* ========================================
+   PLOTLY CHARTS - Light Theme
+   ======================================== */
+
+.js-plotly-plot {
+    background-color: #ffffff !important;
+}
+
+.js-plotly-plot .plotly {
+    background-color: #ffffff !important;
+}
+
+.js-plotly-plot .plotly .bg {
+    fill: #ffffff !important;
+}
+
+.js-plotly-plot .plotly .main-svg {
+    background-color: #ffffff !important;
+}
+
+.js-plotly-plot .plotly text {
+    fill: #212121 !important;
+}
+
+.js-plotly-plot .plotly .xtick text,
+.js-plotly-plot .plotly .ytick text {
+    fill: #424242 !important;
+}
+
+.js-plotly-plot .plotly .gridlayer line,
+.js-plotly-plot .plotly .gridlayer path {
+    stroke: #e0e0e0 !important;
+}
+
+.js-plotly-plot .plotly .zerolinelayer line,
+.js-plotly-plot .plotly .zerolinelayer path {
+    stroke: #bdbdbd !important;
+}
+
+/* Chart container backgrounds */
+.js-plotly-plot .plot-container {
+    background-color: #ffffff !important;
+}
+
+.js-plotly-plot .svg-container {
+    background-color: #ffffff !important;
+}
+
+/* ========================================
+   SCROLLBAR
+   ======================================== */
+
+::-webkit-scrollbar {
+    width: 12px !important;
+    height: 12px !important;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f5f5f5 !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #bdbdbd !important;
+    border-radius: 6px !important;
+    border: 2px solid #f5f5f5 !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #9e9e9e !important;
+}

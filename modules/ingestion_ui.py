@@ -13,7 +13,8 @@ from .components import (
     render_page_header,
     render_section_header,
     render_metric_card,
-    render_alert
+    render_alert,
+    render_proceed_button
 )
 from caching import load_csv, cached_analyze_data, get_df_hash
 
@@ -30,6 +31,9 @@ def page_ingestion() -> None:
     # Drop Zone Section
     render_section_header("Upload Dataset")
     
+    # Check if we need to show a new file uploader or if data already loaded
+    current_file = st.session_state.get('file_name')
+    
     uploaded_file = st.file_uploader(
         "Drag and drop your CSV file here, or click to browse",
         type=['csv'],
@@ -37,30 +41,38 @@ def page_ingestion() -> None:
         label_visibility="collapsed"
     )
     
-    if uploaded_file:
-        try:
-            with st.status("Processing upload...", expanded=True) as status:
-                st.write("Loading dataset...")
-                df = load_csv(uploaded_file)
-                st.write("Validating data structure...")
+    # Process new file upload
+    if uploaded_file is not None:
+        # Check if this is a new file (different from what's already loaded)
+        is_new_file = (current_file != uploaded_file.name) or (st.session_state.df is None)
+        
+        if is_new_file:
+            try:
+                with st.status("Processing upload...", expanded=True) as status:
+                    st.write("Loading dataset...")
+                    df = load_csv(uploaded_file)
+                    st.write("Validating data structure...")
+                    st.write(f"Found {df.shape[0]:,} rows and {df.shape[1]} columns")
+                    
+                    # Store in session state
+                    st.session_state.df = df
+                    st.session_state.file_name = uploaded_file.name
+                    # Reset downstream states when new file is uploaded
+                    st.session_state.df_clean = None
+                    st.session_state.results = None
+                    st.session_state.target_col = None
+                    st.session_state.issues = None
+                    st.session_state.preprocess_config = {}
+                    
+                    status.update(label="Upload complete!", state="complete")
                 
-                # Store in session state
-                st.session_state.df = df
-                st.session_state.file_name = uploaded_file.name
-            st.balloons()  # Process completion animation
-            st.rerun()
-            st.session_state.df_clean = None
-            st.session_state.results = None
-            
-            status.update(label="Upload complete", state="complete")
-            
-            st.toast(f"Loaded {uploaded_file.name} successfully", icon="✅")
-            
-        except Exception as e:
-            render_alert(f"Error loading file: {str(e)}", "error")
-            return
+                st.toast(f"Loaded {uploaded_file.name} successfully", icon="✅")
+                
+            except Exception as e:
+                render_alert(f"Error loading file: {str(e)}", "error")
+                return
     
-    # Guard clause
+    # Guard clause - show info if no data
     if st.session_state.df is None:
         render_alert("Upload a CSV file to continue", "info")
         return
@@ -109,5 +121,9 @@ def page_ingestion() -> None:
         })
         st.dataframe(col_info, width='stretch')
     
-    # Removed intra-page navigation as per user request
-    pass
+    # Proceed to next step button
+    render_proceed_button(
+        next_page="EDA",
+        label="Proceed to Explore Data",
+        disabled=False
+    )

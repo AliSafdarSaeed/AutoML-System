@@ -1,0 +1,47 @@
+/* ===== BUTTONS - DARK THEME ===== */
+
+.stButton>button {
+    background: var(--accent-primary) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: var(--radius-md) !important;
+    padding: var(--space-3) var(--space-5) !important;
+    font-weight: 600 !important;
+    font-size: var(--font-size-sm) !important;
+    transition: all var(--transition-fast) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+.stButton>button:hover {
+    background: var(--accent-primary-hover) !important;
+    box-shadow: var(--shadow-md), var(--shadow-glow) !important;
+    transform: translateY(-1px) !important;
+}
+
+.stButton>button:active {
+    transform: translateY(0) !important;
+}
+
+.stButton>button:disabled {
+    background: var(--bg-surface) !important;
+    color: var(--text-disabled) !important;
+    cursor: not-allowed !important;
+}
+
+/* Secondary buttons */
+.stButton>button[kind="secondary"] {
+    background: var(--bg-surface) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-default) !important;
+}
+
+/* Smoother transitions for all interactive elements */
+button, input, select, textarea, [role="button"], [role="tab"] {
+    transition: all var(--transition-fast) !important;
+}
+
+/* Better focus states */
+*:focus-visible {
+    outline: 2px solid var(--accent-primary) !important;
+    outline-offset: 2px !important;
+}

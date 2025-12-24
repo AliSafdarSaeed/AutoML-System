@@ -1,0 +1,56 @@
+/* ========================================
+   BUTTONS - High Visibility
+   ======================================== */
+
+.stButton > button {
+    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3) !important;
+    letter-spacing: 0.5px !important;
+}
+
+.stButton > button:hover {
+    background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%) !important;
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4) !important;
+    transform: translateY(-1px) !important;
+}
+
+.stButton > button:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 1px 4px rgba(25, 118, 210, 0.3) !important;
+}
+
+/* Secondary buttons */
+.stButton > button[kind="secondary"],
+.stButton > button[data-testid="baseButton-secondary"] {
+    background: #ffffff !important;
+    color: #1976d2 !important;
+    border: 2px solid #1976d2 !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+}
+
+.stButton > button[kind="secondary"]:hover,
+.stButton > button[data-testid="baseButton-secondary"]:hover {
+    background: #e3f2fd !important;
+    border-color: #1565c0 !important;
+    color: #1565c0 !important;
+}
+
+.stButton > button:disabled {
+    background: #e0e0e0 !important;
+    color: #9e9e9e !important;
+    box-shadow: none !important;
+}
+
+/* Download button */
+.stDownloadButton > button {
+    background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3) !important;
+}
+
+.stDownloadButton > button:hover {
+    background: linear-gradient(135deg, #1b5e20 0%, #0d3818 100%) !important;
+}

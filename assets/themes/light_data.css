@@ -1,0 +1,207 @@
+/* ========================================
+   DATAFRAMES & TABLES - Clear Display
+   ======================================== */
+
+.stDataFrame, [data-testid="stDataFrame"] {
+    background-color: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+.stDataFrame *, [data-testid="stDataFrame"] * {
+    color: #212121 !important;
+}
+
+[data-testid="glideDataEditor"] {
+    background-color: #ffffff !important;
+}
+
+[data-testid="glideDataEditor"] * {
+    color: #212121 !important;
+}
+
+/* ========================================
+   GLIDE DATA GRID (Streamlit DataFrame/DataEditor)
+   Force light appearance even before hover
+   ======================================== */
+
+/* Root wrappers Streamlit uses */
+[data-testid="glideDataEditor"],
+[data-testid="stDataFrame"],
+.stDataFrame {
+    background: #ffffff !important;
+}
+
+/* The actual grid root (web component / div) */
+[data-testid="glideDataEditor"] .glide-data-grid,
+[data-testid="glideDataEditor"] [class*="glide"],
+[data-testid="glideDataEditor"] canvas {
+    background: #ffffff !important;
+}
+
+/* Some Streamlit versions render a dark backing layer behind the canvas */
+[data-testid="glideDataEditor"] > div,
+[data-testid="glideDataEditor"] > div > div {
+    background: #ffffff !important;
+}
+
+/* Header area (base is a canvas, but container bg helps) */
+[data-testid="glideDataEditor"] [class*="Header"],
+[data-testid="glideDataEditor"] [class*="header"],
+[data-testid="glideDataEditor"] [data-testid*="header"] {
+    background: #f5f5f5 !important;
+    color: #212121 !important;
+}
+
+/* Tooltips/overlays used inside the grid */
+[data-testid="glideDataEditor"] [role="tooltip"],
+[data-testid="glideDataEditor"] [data-testid*="tooltip"],
+[data-testid="glideDataEditor"] [data-baseweb="popover"] {
+    background: #ffffff !important;
+    color: #212121 !important;
+    border: 1px solid #e0e0e0 !important;
+}
+
+/* Selection/hover should stay light */
+[data-testid="glideDataEditor"] [class*="selection"],
+[data-testid="glideDataEditor"] [class*="Selection"] {
+    background: rgba(25, 118, 210, 0.12) !important;
+}
+
+/* Table headers */
+.stDataFrame thead, [data-testid="stDataFrame"] thead,
+.stDataFrame thead th {
+    background-color: #f5f5f5 !important;
+    color: #212121 !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid #e0e0e0 !important;
+}
+
+/* Table rows */
+.stDataFrame tbody tr {
+    border-bottom: 1px solid #f5f5f5 !important;
+}
+
+.stDataFrame tbody tr:hover {
+    background-color: #e3f2fd !important;
+}
+
+/* DataFrame cells */
+.stDataFrame tbody td {
+    color: #212121 !important;
+    background-color: #ffffff !important;
+}
+
+/* DataFrame alternating rows */
+.stDataFrame tbody tr:nth-child(even) {
+    background-color: #fafafa !important;
+}
+
+/* Glide data editor (advanced dataframe) */
+[data-testid="glideDataEditor"] {
+    background-color: #ffffff !important;
+    color: #212121 !important;
+}
+
+[data-testid="glideDataEditor"] * {
+    color: #212121 !important;
+}
+
+/* ========================================
+   TABS - Clear Navigation
+   ======================================== */
+
+.stTabs [data-baseweb="tab-list"] {
+    background-color: #f5f5f5 !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    padding: 4px !important;
+}
+
+.stTabs [data-baseweb="tab"] {
+    color: #424242 !important;
+    background-color: transparent !important;
+    font-weight: 500 !important;
+    border-radius: 6px !important;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+    color: #1976d2 !important;
+    background-color: #e3f2fd !important;
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: #1976d2 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+/* ========================================
+   EXPANDERS - Clean Expansion
+   ======================================== */
+
+.streamlit-expanderHeader {
+    background-color: #ffffff !important;
+    color: #212121 !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+}
+
+/* Streamlit newer expander DOM (ensures default state isn't dark) */
+[data-testid="stExpander"],
+[data-testid="stExpander"] > div,
+[data-testid="stExpander"] details {
+    background-color: #ffffff !important;
+    color: #212121 !important;
+    border-radius: 8px !important;
+}
+
+[data-testid="stExpander"] details > summary,
+[data-testid="stExpander"] summary {
+    background-color: #ffffff !important;
+    color: #212121 !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+}
+
+[data-testid="stExpander"] details > summary:hover,
+[data-testid="stExpander"] summary:hover {
+    background-color: #f5f5f5 !important;
+    border-color: #1976d2 !important;
+}
+
+[data-testid="stExpander"] details > summary svg,
+[data-testid="stExpander"] summary svg {
+    fill: #424242 !important;
+    color: #424242 !important;
+}
+
+.streamlit-expanderHeader:hover {
+    background-color: #f5f5f5 !important;
+    border-color: #1976d2 !important;
+}
+
+.streamlit-expanderContent {
+    background-color: #ffffff !important;
+    color: #212121 !important;
+    border: 1px solid #e0e0e0 !important;
+    border-top: none !important;
+    border-radius: 0 0 8px 8px !important;
+}
+
+[data-testid="stExpander"] [data-testid="stExpanderDetails"],
+[data-testid="stExpander"] [data-testid="stExpanderDetails"] > div,
+[data-testid="stExpander"] .streamlit-expanderContent {
+    background-color: #ffffff !important;
+    color: #212121 !important;
+}
+
+details summary span {
+    color: #212121 !important;
+}
+
+.streamlit-expanderHeader svg {
+    fill: #424242 !important;
+}

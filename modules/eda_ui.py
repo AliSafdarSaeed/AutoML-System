@@ -12,7 +12,8 @@ from .components import (
     render_page_header,
     render_section_header,
     render_metric_card,
-    render_alert
+    render_alert,
+    render_proceed_button
 )
 from caching import cached_analyze_data, cached_detect_issues, get_df_hash
 from data_utils import (
@@ -143,3 +144,10 @@ def page_eda() -> None:
     # Removed navigation buttons as per user request
     if not (target_col and target_col != '-- Select Target --'):
         render_alert("Please select a target column to proceed", "warning")
+    else:
+        # Proceed to next step button
+        render_proceed_button(
+            next_page="Quality",
+            label="Proceed to Data Quality",
+            disabled=False
+        )

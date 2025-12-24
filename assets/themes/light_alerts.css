@@ -1,0 +1,133 @@
+/* ========================================
+   ALERTS - High Contrast
+   ======================================== */
+
+.stAlert, [data-testid="stAlert"] {
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+}
+
+.stAlert *, [data-testid="stAlert"] * {
+    color: #212121 !important;
+}
+
+/* Info alert */
+.stInfo, [data-testid="stNotification"][kind="info"] {
+    background-color: #e3f2fd !important;
+    border-left: 4px solid #1976d2 !important;
+}
+
+/* Success alert */
+.stSuccess, [data-testid="stNotification"][kind="success"] {
+    background-color: #e8f5e9 !important;
+    border-left: 4px solid #2e7d32 !important;
+}
+
+/* Warning alert */
+.stWarning, [data-testid="stNotification"][kind="warning"] {
+    background-color: #fff3e0 !important;
+    border-left: 4px solid #f57c00 !important;
+}
+
+/* Error alert */
+.stError, [data-testid="stNotification"][kind="error"] {
+    background-color: #ffebee !important;
+    border-left: 4px solid #d32f2f !important;
+}
+
+/* ========================================
+   STATUS & PROGRESS
+   ======================================== */
+
+[data-testid="stStatusWidget"],
+[data-testid="stStatus"] {
+    background-color: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+[data-testid="stStatusWidget"] *,
+[data-testid="stStatus"] * {
+    color: #212121 !important;
+}
+
+.stProgress > div > div {
+    background: linear-gradient(90deg, #1976d2 0%, #1565c0 100%) !important;
+    border-radius: 4px !important;
+}
+
+[data-testid="stSpinner"] {
+    color: #1976d2 !important;
+}
+
+[data-testid="stSpinner"] > div {
+    border-color: rgba(0,0,0,0.1) !important;
+    border-top-color: #1976d2 !important;
+}
+
+/* Toast notifications */
+[data-testid="stToast"] {
+    background-color: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important;
+    color: #212121 !important;
+}
+
+/* Exception/Error display */
+[data-testid="stException"] {
+    background: #ffebee !important;
+    border: 1px solid #d32f2f !important;
+}
+
+[data-testid="stException"] * {
+    color: #212121 !important;
+}
+
+/* ========================================
+   OUTPUT PANELS - Light Background
+   ======================================== */
+
+/* Status widget output */
+[data-testid="stStatusWidget"],
+[data-testid="stStatus"] {
+    background-color: #ffffff !important;
+}
+
+[data-testid="stStatusWidget"] > div,
+[data-testid="stStatus"] > div {
+    background-color: #ffffff !important;
+}
+
+/* Any output container */
+[data-testid="stCapturedOutput"],
+.stCodeBlock,
+.stMarkdown code,
+pre {
+    background-color: #f5f5f5 !important;
+    color: #212121 !important;
+}
+
+/* JSON output */
+[data-testid="stJson"] {
+    background-color: #ffffff !important;
+    color: #212121 !important;
+}
+
+[data-testid="stJson"] * {
+    color: #212121 !important;
+}
+
+/* Any dark output panels */
+div[data-testid="element-container"] > div {
+    background-color: transparent !important;
+}
+
+/* Expander content */
+.streamlit-expanderContent {
+    background-color: #ffffff !important;
+}
+
+.streamlit-expanderContent * {
+    color: #212121 !important;
+}

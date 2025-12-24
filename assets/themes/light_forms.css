@@ -1,0 +1,276 @@
+/* ========================================
+   FORM INPUTS - Clean & Visible
+   ======================================== */
+
+/* Text inputs */
+.stTextInput > div > div > input,
+.stNumberInput > div > div > input,
+.stTextArea textarea {
+    background-color: #ffffff !important;
+    color: #212121 !important;
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+}
+
+.stTextInput > div > div > input:focus,
+.stNumberInput > div > div > input:focus,
+.stTextArea textarea:focus {
+    border-color: #1976d2 !important;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1) !important;
+}
+
+.stTextInput label, .stNumberInput label, 
+.stTextArea label {
+    color: #424242 !important;
+    font-weight: 600 !important;
+}
+
+/* Placeholder text */
+.stTextInput > div > div > input::placeholder,
+.stTextArea textarea::placeholder {
+    color: #9e9e9e !important;
+}
+
+/* ========================================
+   SELECT BOXES & DROPDOWNS
+   ======================================== */
+
+.stSelectbox > div > div {
+    background-color: #ffffff !important;
+    color: #212121 !important;
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+}
+
+.stSelectbox label {
+    color: #424242 !important;
+    font-weight: 600 !important;
+}
+
+.stSelectbox [data-baseweb="select"] > div {
+    background-color: #ffffff !important;
+    color: #212121 !important;
+}
+
+.stSelectbox svg {
+    fill: #424242 !important;
+}
+
+/* Dropdown menu */
+[data-baseweb="popover"], [data-baseweb="menu"] {
+    background-color: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+}
+
+[data-baseweb="menu"] li {
+    color: #212121 !important;
+    background-color: #ffffff !important;
+}
+
+[data-baseweb="menu"] li:hover {
+    background-color: #e3f2fd !important;
+    color: #1976d2 !important;
+}
+
+/* ========================================
+   MULTI-SELECT
+   ======================================== */
+
+.stMultiSelect > div {
+    background-color: #ffffff !important;
+    color: #212121 !important;
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+}
+
+.stMultiSelect label {
+    color: #424242 !important;
+    font-weight: 600 !important;
+}
+
+.stMultiSelect [data-baseweb="tag"] {
+    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-weight: 500 !important;
+}
+
+.stMultiSelect [data-baseweb="tag"] svg {
+    fill: #ffffff !important;
+}
+
+/* ========================================
+   SLIDER - High Visibility
+   ======================================== */
+
+.stSlider label {
+    color: #424242 !important;
+    font-weight: 600 !important;
+}
+
+.stSlider > div > div {
+    background-color: #e0e0e0 !important;
+}
+
+.stSlider > div > div > div {
+    background: linear-gradient(90deg, #1976d2 0%, #1565c0 100%) !important;
+}
+
+.stSlider [role="slider"] {
+    background-color: #1976d2 !important;
+    border: 3px solid #ffffff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.stSlider [data-testid="stTickBarMin"],
+.stSlider [data-testid="stTickBarMax"] {
+    color: #424242 !important;
+    font-weight: 600 !important;
+}
+
+div[data-testid="stSlider"] * {
+    color: #212121 !important;
+    font-weight: 600 !important;
+}
+
+/* ========================================
+   CHECKBOX & RADIO
+   ======================================== */
+
+.stCheckbox label, .stCheckbox span {
+    color: #212121 !important;
+    font-weight: 500 !important;
+}
+
+.stCheckbox [data-testid="stCheckbox"] > label > span:first-child {
+    background-color: #ffffff !important;
+    border: 2px solid #757575 !important;
+    border-radius: 4px !important;
+}
+
+.stCheckbox input:checked + span {
+    background-color: #1976d2 !important;
+    border-color: #1976d2 !important;
+}
+
+.stRadio label, .stRadio > div {
+    color: #212121 !important;
+    font-weight: 500 !important;
+}
+
+.stRadio > div > label {
+    color: #212121 !important;
+    background-color: #ffffff !important;
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    padding: 12px 20px !important;
+}
+
+.stRadio > div > label:hover {
+    background-color: #e3f2fd !important;
+    border-color: #1976d2 !important;
+}
+
+.stRadio > div > label[data-checked="true"] {
+    background-color: #1976d2 !important;
+    border-color: #1976d2 !important;
+    color: #ffffff !important;
+}
+
+/* ========================================
+   FILE UPLOADER - Maximum Visibility
+   ======================================== */
+
+[data-testid="stFileUploader"] {
+    background-color: #ffffff !important;
+    border: 3px dashed #1976d2 !important;
+    border-radius: 12px !important;
+    padding: 32px !important;
+}
+
+[data-testid="stFileUploader"] > div,
+[data-testid="stFileUploader"] section,
+[data-testid="stFileUploader"] section > div {
+    background-color: #ffffff !important;
+    border: none !important;
+}
+
+[data-testid="stFileUploader"] [data-testid="stFileUploaderDropzone"] {
+    background-color: #ffffff !important;
+    border: none !important;
+}
+
+[data-testid="stFileUploader"] * {
+    color: #212121 !important;
+}
+
+[data-testid="stFileUploader"] small,
+[data-testid="stFileUploader"] [data-baseweb="file-uploader-hint"] {
+    color: #757575 !important;
+    font-weight: 500 !important;
+}
+
+[data-testid="stFileUploader"] svg {
+    fill: #1976d2 !important;
+    stroke: #1976d2 !important;
+}
+
+[data-testid="stFileUploader"]:hover {
+    border-color: #1565c0 !important;
+    background-color: #e3f2fd !important;
+}
+
+[data-testid="stFileUploader"] button {
+    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-weight: 600 !important;
+}
+
+[data-baseweb="file-uploader"] {
+    background-color: #ffffff !important;
+}
+
+/* File uploader - Delete/Close button */
+[data-testid="stFileUploader"] button[kind="icon"],
+[data-testid="stFileUploader"] button[aria-label*="Remove"],
+[data-testid="stFileUploader"] button[aria-label*="Delete"] {
+    background: #ffebee !important;
+    color: #d32f2f !important;
+    border: 1px solid #ef9a9a !important;
+    border-radius: 6px !important;
+    padding: 6px !important;
+    transition: all 0.2s !important;
+}
+
+[data-testid="stFileUploader"] button[kind="icon"]:hover,
+[data-testid="stFileUploader"] button[aria-label*="Remove"]:hover,
+[data-testid="stFileUploader"] button[aria-label*="Delete"]:hover {
+    background: #d32f2f !important;
+    color: #ffffff !important;
+    border-color: #d32f2f !important;
+}
+
+[data-testid="stFileUploader"] button[kind="icon"] svg,
+[data-testid="stFileUploader"] button[aria-label*="Remove"] svg,
+[data-testid="stFileUploader"] button[aria-label*="Delete"] svg {
+    fill: currentColor !important;
+}
+
+/* ========================================
+   FORM CONTAINER
+   ======================================== */
+
+[data-testid="stForm"] {
+    background: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+}
+
+[data-testid="stForm"] hr {
+    background: #e0e0e0 !important;
+}

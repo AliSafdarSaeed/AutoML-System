@@ -1,0 +1,78 @@
+/* ===== DATA DISPLAY - DARK THEME ===== */
+
+/* ===== DATAFRAMES ===== */
+.stDataFrame {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border-default);
+}
+
+.stDataFrame table {
+    font-size: var(--font-size-sm);
+}
+
+.stDataFrame thead tr {
+    background: var(--bg-surface);
+}
+
+.stDataFrame tbody tr:nth-child(even) {
+    background: var(--bg-surface);
+}
+
+.stDataFrame tbody tr:hover {
+    background: var(--bg-hover);
+}
+
+/* DataFrame header */
+.stDataFrame [data-testid="glideDataEditor"] {
+    border-radius: var(--radius-lg) !important;
+    overflow: hidden !important;
+}
+
+/* ===== TABS ===== */
+.stTabs [data-baseweb="tab-list"] {
+    gap: var(--space-1);
+    background: var(--bg-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-1);
+    border: 1px solid var(--border-default);
+}
+
+.stTabs [data-baseweb="tab"] {
+    background: transparent !important;
+    border-radius: var(--radius-md) !important;
+    color: var(--text-secondary) !important;
+    font-weight: 500 !important;
+    padding: var(--space-2) var(--space-4) !important;
+    transition: all var(--transition-fast) !important;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+    color: var(--text-primary) !important;
+    background: var(--bg-hover) !important;
+}
+
+.stTabs [aria-selected="true"] {
+    background: var(--accent-primary) !important;
+    color: white !important;
+}
+
+/* ===== EXPANDERS ===== */
+.streamlit-expanderHeader {
+    background: var(--bg-surface) !important;
+    border-radius: var(--radius-md) !important;
+    border: 1px solid var(--border-default) !important;
+    color: var(--text-primary) !important;
+    font-weight: 500 !important;
+    transition: all var(--transition-base) !important;
+}
+
+.streamlit-expanderHeader:hover {
+    background: var(--bg-hover) !important;
+    border-color: var(--border-strong) !important;
+}
+
+/* Container styling */
+[data-testid="stVerticalBlockBorderWrapper"] {
+    border-radius: var(--radius-lg) !important;
+}

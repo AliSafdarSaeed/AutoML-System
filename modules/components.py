@@ -245,3 +245,52 @@ def render_status_dot(completed: bool = False) -> str:
     """
     css_class = "status-dot" if completed else "status-dot status-dot--pending"
     return f'<span class="{css_class}"></span>'
+
+
+def render_proceed_button(
+    next_page: str,
+    label: str = "Proceed to Next Step",
+    disabled: bool = False,
+    show_icon: bool = True
+) -> bool:
+    """
+    Render a prominent 'Proceed to Next Step' button.
+    
+    Args:
+        next_page: The page name to navigate to
+        label: Button label text
+        disabled: Whether button is disabled
+        show_icon: Whether to show arrow icon
+    
+    Returns:
+        Boolean indicating if button was clicked
+    """
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Divider before button
+    st.markdown("""
+    <div style="
+        border-top: 1px solid var(--border-default);
+        margin: 1.5rem 0;
+        opacity: 0.5;
+    "></div>
+    """, unsafe_allow_html=True)
+    
+    # Create columns to center the button
+    col1, col2, col3 = st.columns([1, 2, 1])
+    
+    with col2:
+        button_label = f"{label} →" if show_icon else label
+        clicked = st.button(
+            button_label,
+            key=f"proceed_to_{next_page.lower()}",
+            type="primary",
+            use_container_width=True,
+            disabled=disabled
+        )
+        
+        if clicked and not disabled:
+            st.session_state.current_page = next_page
+            st.rerun()
+    
+    return clicked

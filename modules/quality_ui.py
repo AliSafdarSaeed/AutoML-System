@@ -21,8 +21,71 @@ from data_utils import handle_outliers, apply_preprocessing, detect_issues
 from .recommendations import (
     get_missing_value_recommendation,
     get_outlier_recommendation,
-    get_encoding_recommendation
+    get_encoding_recommendation,
+    get_scaling_recommendation
 )
+
+
+def _get_all_recommended_fixes(df: pd.DataFrame, issues: Dict[str, Any], target_col: str) -> Dict[str, Any]:
+    """
+    Generate all recommended fixes based on detected issues.
+    
+    Returns a config dict with all AI-recommended settings.
+    """
+    config = {}
+    
+    # Missing values - get recommended strategy for each column
+    missing_strategies = {}
+    if issues.get('missing_values'):
+        for col, info in issues['missing_values'].items():
+            unique_ratio = df[col].nunique() / len(df) if len(df) > 0 else 0
+            _, _, suggested_method = get_missing_value_recommendation(
+                col, str(df[col].dtype), info['percentage'], unique_ratio
+            )
+            if suggested_method != 'drop' or info['percentage'] > 50:
+                missing_strategies[col] = suggested_method
+    config['missing_value_strategies'] = missing_strategies
+    
+    # Outliers - get recommended strategy
+    if issues.get('outliers'):
+        outlier_cols = list(issues['outliers'].keys())
+        first_col = outlier_cols[0]
+        first_info = issues['outliers'][first_col]
+        _, _, suggested_method = get_outlier_recommendation(
+            first_col, first_info['count'], first_info['percentage'], len(df)
+        )
+        config['outlier_columns'] = outlier_cols
+        config['outlier_strategy'] = suggested_method
+    
+    # Categorical encoding - get recommended encoding for each column
+    cat_cols = [c for c in df.select_dtypes(include=['object']).columns if c != target_col]
+    encoding_strategies = {}
+    for col in cat_cols:
+        unique = df[col].nunique()
+        _, _, suggested_method = get_encoding_recommendation(col, unique, len(df))
+        encoding_strategies[col] = suggested_method
+    config['encoding_strategies'] = encoding_strategies
+    
+    # Feature scaling - analyze dataset to recommend scaling
+    numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns.tolist()
+    if numeric_cols and len(numeric_cols) > 1:
+        ranges = df[numeric_cols].max() - df[numeric_cols].min()
+        feature_ranges_vary = (ranges.max() / (ranges.min() + 1e-10)) > 10
+    else:
+        feature_ranges_vary = False
+    
+    _, _, suggested_scaling = get_scaling_recommendation(
+        has_tree_models=True,  # Default assumption
+        has_linear_models=True,
+        feature_ranges_vary=feature_ranges_vary
+    )
+    config['scaling_strategy'] = suggested_scaling if suggested_scaling != 'None' else None
+    
+    # Default test size
+    config['test_size'] = 0.2
+    config['target_col'] = target_col
+    
+    return config
 
 
 def _render_issue_card(
@@ -86,6 +149,87 @@ def page_quality() -> None:
     )
     
     config = st.session_state.preprocess_config.copy()
+    
+    # ===== QUICK ACTION: APPLY ALL RECOMMENDED FIXES =====
+    st.markdown(
+        """
+        <style>
+          /* Target the specific container for the AI Auto-Fix banner */
+          /* Using a more robust selector to find the container holding our marker */
+          div[data-testid="stVerticalBlock"]:has(#autofix-marker) {
+              background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.07) 100%) !important;
+              border: 1px solid rgba(99, 102, 241, 0.25) !important;
+              border-radius: 16px !important;
+              padding: 24px !important;
+              margin: 12px 0 24px 0 !important;
+              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+          }
+          
+          /* Style the button inside this specific container */
+          div[data-testid="stVerticalBlock"]:has(#autofix-marker) button {
+              background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+              border: none !important;
+              color: white !important;
+              font-weight: 700 !important;
+              border-radius: 12px !important;
+              padding: 0.6rem 1.2rem !important;
+              box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25) !important;
+              transition: all 0.2s ease !important;
+          }
+          
+          div[data-testid="stVerticalBlock"]:has(#autofix-marker) button:hover {
+              transform: translateY(-2px) !important;
+              box-shadow: 0 12px 25px rgba(99, 102, 241, 0.35) !important;
+          }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    with st.container():
+        # Marker inside the container to allow targeting the container via :has()
+        st.markdown('<div id="autofix-marker" style="display:none"></div>', unsafe_allow_html=True)
+        
+        c_left, c_right = st.columns([4, 1.5], vertical_alignment="center")
+
+        with c_left:
+            st.markdown(
+                """
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div style="
+                        width: 54px;
+                        height: 54px;
+                        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+                        border-radius: 14px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 28px;
+                        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+                        flex-shrink: 0;
+                    ">🤖</div>
+                    <div>
+                        <div style="font-weight: 800; color: var(--text-primary); font-size: 18px; margin-bottom: 4px; letter-spacing: -0.01em;">Auto-Fix Available</div>
+                        <div style="color: var(--text-secondary); font-size: 14px; line-height: 1.5; opacity: 0.9;">Instantly apply all recommended fixes based on ML best practices</div>
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        with c_right:
+            if st.button(
+                "Apply All Fixes",
+                type="primary",
+                use_container_width=True,
+                key="autofix_btn",
+                help="Apply all AI-recommended fixes automatically",
+            ):
+                recommended_config = _get_all_recommended_fixes(df, issues, target_col)
+                st.session_state.preprocess_config = recommended_config
+                config = recommended_config
+                st.toast("✅ All recommended fixes applied!", icon="🎉")
+                st.rerun()
     
     # ===== MISSING VALUES =====
     render_section_header("Missing Values")
@@ -201,26 +345,88 @@ def page_quality() -> None:
     # ===== FEATURE SCALING =====
     render_section_header("Feature Scaling")
     
+    # Get scaling recommendation based on dataset characteristics
+    numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns.tolist()
+    if numeric_cols and len(numeric_cols) > 1:
+        ranges = df[numeric_cols].max() - df[numeric_cols].min()
+        feature_ranges_vary = (ranges.max() / (ranges.min() + 1e-10)) > 10
+    else:
+        feature_ranges_vary = False
+    
+    scaling_rec, scaling_reason, suggested_scaling = get_scaling_recommendation(
+        has_tree_models=True,
+        has_linear_models=True,
+        feature_ranges_vary=feature_ranges_vary
+    )
+    
+    # Show AI recommendation for scaling
+    st.info(f"{scaling_rec}\n\n**Why?** {scaling_reason}", icon="🤖")
+    
+    # Determine default based on recommendation or stored config
+    scaling_options = ['None', 'standard', 'minmax', 'robust']
+    stored_scaling = config.get('scaling_strategy')
+    if stored_scaling and stored_scaling in scaling_options:
+        default_idx = scaling_options.index(stored_scaling)
+    elif suggested_scaling in scaling_options:
+        default_idx = scaling_options.index(suggested_scaling)
+    else:
+        default_idx = 0
+    
     scaling = st.radio(
         "Select scaling method",
-        ['None', 'standard', 'minmax'],
+        scaling_options,
+        index=default_idx,
         horizontal=True,
-        format_func=lambda x: {'None': 'No Scaling', 'standard': 'StandardScaler', 'minmax': 'MinMaxScaler'}[x]
+        format_func=lambda x: {
+            'None': 'No Scaling',
+            'standard': 'StandardScaler (Z-score)',
+            'minmax': 'MinMaxScaler (0-1)',
+            'robust': 'RobustScaler (IQR-based)'
+        }[x],
+        help=f"AI suggests: {suggested_scaling.upper() if suggested_scaling != 'None' else 'No Scaling'}"
     )
     config['scaling_strategy'] = scaling if scaling != 'None' else None
     
     # ===== TRAIN-TEST SPLIT =====
     render_section_header("Train-Test Split")
     
+    # Get stored test_size or default to 0.2 (20%)
+    stored_test_size = config.get('test_size')
+    if stored_test_size is None or stored_test_size == 0:
+        default_test_pct = 20
+    else:
+        default_test_pct = int(float(stored_test_size) * 100)
+    
+    # Ensure the default is within valid range
+    default_test_pct = max(10, min(40, default_test_pct))
+    
     test_size_int = st.slider(
-        "Test set size",
+        "Test set size (%)",
         min_value=10,
         max_value=40,
-        value=int(config.get('test_size', 0.2) * 100),
+        value=default_test_pct,
         step=5,
         format="%d%%",
-        help="Percentage of data to reserve for testing"
+        help="Percentage of data to reserve for testing. Recommended: 20-30%"
     )
+    
+    # Display the split info
+    train_pct = 100 - test_size_int
+    st.markdown(f"""
+    <div style="
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 12px;
+        background: var(--bg-surface);
+        border-radius: 8px;
+        margin-top: 8px;
+        font-size: 13px;
+    ">
+        <span style="color: var(--text-muted);">Training: <strong style="color: var(--text-primary);">{train_pct}%</strong></span>
+        <span style="color: var(--text-muted);">Testing: <strong style="color: var(--accent-primary);">{test_size_int}%</strong></span>
+    </div>
+    """, unsafe_allow_html=True)
+    
     config['test_size'] = test_size_int / 100.0
     config['target_col'] = target_col
     
@@ -262,7 +468,10 @@ def page_quality() -> None:
                     st.write("Applying transformations...")
                     df_proc, p_log = apply_preprocessing(df_proc, config)
                     log.extend(p_log)
-                    log.append(f"Train/Test split: {int((1-test_size)*100)}% / {int(test_size*100)}%")
+                    
+                    # Use the config test_size value
+                    ts = config.get('test_size', 0.2)
+                    log.append(f"Train/Test split: {int((1-ts)*100)}% / {int(ts*100)}%")
                     
                     st.session_state.df_clean = df_proc
                     st.session_state.preprocessing_log = log

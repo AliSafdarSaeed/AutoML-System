@@ -15,7 +15,8 @@ from .components import (
     render_section_header,
     render_metric_card,
     render_alert,
-    render_best_model_card
+    render_best_model_card,
+    render_proceed_button
 )
 from models import (
     ModelTrainer,
@@ -213,6 +214,9 @@ def page_training() -> None:
                         width='stretch'
                     )
         
-        # Navigation
-        # Removed intra-page navigation as per user request
-        pass
+        # Proceed to Report button
+        render_proceed_button(
+            next_page="Report",
+            label="Proceed to Generate Report",
+            disabled=False
+        )

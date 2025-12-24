@@ -5,7 +5,7 @@ Functions for cleaning, encoding, scaling, and handling outliers
 
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder, OrdinalEncoder
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler, LabelEncoder, OrdinalEncoder
 
 
 def apply_preprocessing(df: pd.DataFrame, config: dict) -> tuple:
@@ -89,6 +89,10 @@ def apply_preprocessing(df: pd.DataFrame, config: dict) -> tuple:
                 scaler = MinMaxScaler()
                 df_processed[feature_cols] = scaler.fit_transform(df_processed[feature_cols])
                 log.append(f"Applied MinMaxScaler to {len(feature_cols)} numeric features")
+            elif scaling_strategy == 'robust':
+                scaler = RobustScaler()
+                df_processed[feature_cols] = scaler.fit_transform(df_processed[feature_cols])
+                log.append(f"Applied RobustScaler to {len(feature_cols)} numeric features")
     
     return df_processed, log
 

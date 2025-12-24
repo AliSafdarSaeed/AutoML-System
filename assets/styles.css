@@ -1,6 +1,6 @@
 /* =============================================================================
    AutoML Pro - Enterprise Design System
-   Light/Dark Mode with Corporate-Level Aesthetics
+   
    ============================================================================= */
 
 /* ===== ROOT VARIABLES - DARK MODE (Default) ===== */
@@ -11,6 +11,7 @@
     --bg-surface: #1e1e26;
     --bg-hover: #252530;
     --bg-active: #2d2d3a;
+    --bg-sidebar: #18181f;
 
     /* Borders */
     --border-subtle: rgba(255, 255, 255, 0.04);
@@ -22,19 +23,20 @@
     --text-secondary: #a1a1aa;
     --text-muted: #71717a;
     --text-disabled: #52525b;
+    --text-on-accent: #ffffff;
 
     /* Accent Colors */
     --accent-primary: #6366f1;
     --accent-primary-hover: #818cf8;
     --accent-secondary: #8b5cf6;
     --accent-success: #22c55e;
-    --accent-success-bg: rgba(34, 197, 94, 0.08);
+    --accent-success-bg: rgba(34, 197, 94, 0.15);
     --accent-warning: #f59e0b;
-    --accent-warning-bg: rgba(245, 158, 11, 0.08);
+    --accent-warning-bg: rgba(245, 158, 11, 0.15);
     --accent-error: #ef4444;
-    --accent-error-bg: rgba(239, 68, 68, 0.08);
+    --accent-error-bg: rgba(239, 68, 68, 0.15);
     --accent-info: #3b82f6;
-    --accent-info-bg: rgba(59, 130, 246, 0.08);
+    --accent-info-bg: rgba(59, 130, 246, 0.15);
 
     /* Shadows - Dark */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -75,33 +77,11 @@
     --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-}
 
-/* ===== LIGHT MODE ===== */
-[data-theme="light"],
-.light-mode {
-    --bg-app: #ffffff;
-    --bg-elevated: #f8fafc;
-    --bg-surface: #f1f5f9;
-    --bg-hover: #e2e8f0;
-    --bg-active: #cbd5e1;
-
-    --border-subtle: rgba(0, 0, 0, 0.06);
-    --border-default: rgba(0, 0, 0, 0.12);
-    --border-strong: rgba(0, 0, 0, 0.20);
-
-    --text-primary: #0f172a;
-    --text-secondary: #334155;
-    --text-muted: #64748b;
-    --text-disabled: #94a3b8;
-
-    --accent-primary: #4f46e5;
-    --accent-primary-hover: #4338ca;
-
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.1);
-    --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.15);
+    /* Slider specific */
+    --slider-track-bg: #3f3f46;
+    --slider-thumb-bg: var(--accent-primary);
+    --slider-value-color: var(--text-primary);
 }
 
 /* ===== TYPOGRAPHY ===== */
@@ -127,6 +107,11 @@ body,
 .main .block-container {
     padding: var(--space-10) var(--space-12);
     max-width: 1200px;
+}
+
+/* Ensure main content area inherits theme background */
+.main, .main > div, .stApp > header + div {
+    background: inherit !important;
 }
 
 /* Unhide header but keep items hidden to show sidebar toggle */
@@ -156,27 +141,66 @@ button[data-testid="stSidebarCollapseButton"] {
     margin-top: var(--space-2) !important;
     display: flex !important;
     visibility: visible !important;
+    width: 36px !important;
+    height: 36px !important;
+    padding: 8px !important;
 }
 
 button[data-testid="stSidebarCollapseButton"]:hover {
     border-color: var(--accent-primary) !important;
     box-shadow: var(--shadow-sm) !important;
     transform: translateY(-1px);
+    background: var(--bg-hover) !important;
 }
 
 button[data-testid="stSidebarCollapseButton"] svg {
+    fill: var(--text-primary) !important;
+    width: 18px !important;
+    height: 18px !important;
+}
+
+/* Sidebar expand button when collapsed */
+button[data-testid="stSidebarExpandButton"],
+button[data-testid="baseButton-headerNoPadding"] {
+    background: var(--bg-elevated) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: var(--radius-md) !important;
+    color: var(--text-primary) !important;
+    padding: 8px !important;
+    margin: 8px !important;
+}
+
+button[data-testid="stSidebarExpandButton"]:hover,
+button[data-testid="baseButton-headerNoPadding"]:hover {
+    border-color: var(--accent-primary) !important;
+    background: var(--bg-hover) !important;
+}
+
+button[data-testid="stSidebarExpandButton"] svg,
+button[data-testid="baseButton-headerNoPadding"] svg {
     fill: var(--text-primary) !important;
 }
 
 /* ===== SIDEBAR ===== */
 section[data-testid="stSidebar"] {
-    background: var(--bg-elevated);
+    background: var(--bg-sidebar) !important;
     border-right: 1px solid var(--border-default);
     width: 280px !important;
+    transition: all var(--transition-base);
+}
+
+section[data-testid="stSidebar"] > div {
+    background: var(--bg-sidebar) !important;
 }
 
 section[data-testid="stSidebar"] .block-container {
     padding: var(--space-4) var(--space-3);
+}
+
+/* Sidebar collapsed state */
+section[data-testid="stSidebar"][aria-expanded="false"] {
+    width: 0 !important;
+    min-width: 0 !important;
 }
 
 /* Sidebar sections */
@@ -423,7 +447,7 @@ section[data-testid="stSidebar"] .block-container {
 
 /* ===== FILE UPLOADER ===== */
 [data-testid="stFileUploader"] {
-    background: var(--bg-surface);
+    background: var(--bg-elevated);
     border: 2px dashed var(--border-strong);
     border-radius: var(--radius-lg);
     padding: var(--space-8);
@@ -431,9 +455,46 @@ section[data-testid="stSidebar"] .block-container {
     text-align: center;
 }
 
+[data-testid="stFileUploader"] > div,
+[data-testid="stFileUploader"] section,
+[data-testid="stFileUploader"] section > div {
+    background: var(--bg-elevated) !important;
+    border: none !important;
+}
+
+[data-testid="stFileUploader"] [data-testid="stFileUploaderDropzone"] {
+    background: var(--bg-elevated) !important;
+    border: 2px dashed var(--border-strong) !important;
+    border-radius: var(--radius-lg) !important;
+}
+
+[data-testid="stFileUploader"] [data-testid="stFileUploaderDropzoneInstructions"],
+[data-testid="stFileUploader"] [data-testid="stFileUploaderDropzoneInstructions"] div,
+[data-testid="stFileUploader"] [data-testid="stFileUploaderDropzoneInstructions"] span {
+    color: var(--text-primary) !important;
+}
+
+[data-testid="stFileUploader"] small,
+[data-testid="stFileUploader"] [data-baseweb="file-uploader-hint"] {
+    color: var(--text-muted) !important;
+}
+
+[data-testid="stFileUploader"] svg {
+    fill: var(--text-muted) !important;
+    stroke: var(--text-muted) !important;
+}
+
 [data-testid="stFileUploader"]:hover {
     border-color: var(--accent-primary);
     background: var(--accent-info-bg);
+}
+
+[data-baseweb="file-uploader"] {
+    background: var(--bg-elevated) !important;
+}
+
+[data-baseweb="file-uploader"] * {
+    color: var(--text-primary) !important;
 }
 
 /* ===== EXPANDERS ===== */
@@ -514,18 +575,52 @@ section[data-testid="stSidebar"] .block-container {
     border-radius: var(--radius-sm);
 }
 
-/* ===== SLIDER ===== */
-.stSlider>div>div {
-    background: var(--bg-surface) !important;
+/* ===== SLIDER - Enhanced Visibility ===== */
+.stSlider {
+    padding: 8px 0 !important;
 }
 
-.stSlider>div>div>div {
+.stSlider label {
+    color: var(--text-primary) !important;
+    font-weight: 500 !important;
+}
+
+.stSlider > div > div {
+    background: var(--slider-track-bg) !important;
+}
+
+.stSlider > div > div > div {
     background: var(--accent-primary) !important;
+}
+
+/* Slider thumb */
+.stSlider [role="slider"] {
+    background: var(--accent-primary) !important;
+    border: 2px solid white !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+}
+
+/* Slider value display */
+.stSlider [data-testid="stTickBarMin"],
+.stSlider [data-testid="stTickBarMax"] {
+    color: var(--text-primary) !important;
+    font-weight: 500 !important;
+}
+
+/* The current value shown on slider */
+div[data-testid="stSlider"] > div > div:nth-child(2) {
+    color: var(--slider-value-color) !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
 }
 
 /* ===== CHECKBOX ===== */
 .stCheckbox label {
-    color: var(--text-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+.stCheckbox span {
+    color: var(--text-primary) !important;
 }
 
 /* ===== SCROLLBAR ===== */
@@ -691,4 +786,134 @@ section[data-testid="stSidebar"] .block-container {
 .badge-info {
     background: var(--accent-info-bg);
     color: var(--accent-info);
+}
+
+/* ===== ADDITIONAL UI ENHANCEMENTS ===== */
+
+/* Smoother transitions for all interactive elements */
+button, input, select, textarea, [role="button"], [role="tab"] {
+    transition: all var(--transition-fast) !important;
+}
+
+/* Better focus states */
+*:focus-visible {
+    outline: 2px solid var(--accent-primary) !important;
+    outline-offset: 2px !important;
+}
+
+/* Radio buttons enhancement */
+.stRadio > div {
+    gap: 8px !important;
+}
+
+.stRadio > div > label {
+    color: var(--text-primary) !important;
+    padding: 8px 16px !important;
+    border-radius: var(--radius-md) !important;
+    border: 1px solid var(--border-default) !important;
+    background: var(--bg-elevated) !important;
+    transition: all var(--transition-fast) !important;
+}
+
+.stRadio > div > label:hover {
+    border-color: var(--accent-primary) !important;
+    background: var(--bg-hover) !important;
+}
+
+.stRadio > div > label[data-checked="true"] {
+    background: var(--accent-primary) !important;
+    border-color: var(--accent-primary) !important;
+    color: white !important;
+}
+
+/* Multiselect enhancements */
+.stMultiSelect [data-baseweb="tag"] {
+    background: var(--accent-primary) !important;
+    border-radius: var(--radius-sm) !important;
+}
+
+.stMultiSelect [data-baseweb="tag"] span {
+    color: white !important;
+}
+
+/* Status indicator animation */
+@keyframes statusPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+    }
+}
+
+.status-online {
+    animation: statusPulse 2s infinite !important;
+}
+
+/* Toast notifications */
+[data-testid="stToast"] {
+    background: var(--bg-elevated) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+/* Spinner/Loading states */
+.stSpinner > div {
+    border-top-color: var(--accent-primary) !important;
+}
+
+/* Status widget styling */
+[data-testid="stStatusWidget"] {
+    background: var(--bg-elevated) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: var(--radius-lg) !important;
+}
+
+/* Balloons animation visibility */
+[data-testid="stBalloons"] {
+    z-index: 9999 !important;
+}
+
+/* Select box dropdown */
+[data-baseweb="popover"] {
+    background: var(--bg-elevated) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+[data-baseweb="menu"] {
+    background: var(--bg-elevated) !important;
+}
+
+[data-baseweb="menu"] li {
+    color: var(--text-primary) !important;
+}
+
+[data-baseweb="menu"] li:hover {
+    background: var(--bg-hover) !important;
+}
+
+/* Plotly chart backgrounds */
+.js-plotly-plot .plotly .bg {
+    fill: transparent !important;
+}
+
+/* DataFrame header */
+.stDataFrame [data-testid="glideDataEditor"] {
+    border-radius: var(--radius-lg) !important;
+    overflow: hidden !important;
+}
+
+/* Note: DataFrame colors/backgrounds are theme-specific (see assets/themes/*_data.css). */
+
+/* Container styling */
+[data-testid="stVerticalBlockBorderWrapper"] {
+    border-radius: var(--radius-lg) !important;
+}
+
+/* Form submit button */
+.stForm [data-testid="stFormSubmitButton"] button {
+    width: 100% !important;
 }

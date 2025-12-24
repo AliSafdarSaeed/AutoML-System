@@ -1,0 +1,182 @@
+/* ===== SIDEBAR - DARK THEME ===== */
+
+/* Style the sidebar toggle (Hamburger) */
+button[data-testid="stSidebarCollapseButton"] {
+    background: var(--bg-elevated) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: var(--radius-md) !important;
+    color: var(--text-primary) !important;
+    transition: all var(--transition-fast) !important;
+    margin-left: var(--space-4) !important;
+    margin-top: var(--space-2) !important;
+    display: flex !important;
+    visibility: visible !important;
+    width: 36px !important;
+    height: 36px !important;
+    padding: 8px !important;
+}
+
+button[data-testid="stSidebarCollapseButton"]:hover {
+    border-color: var(--accent-primary) !important;
+    box-shadow: var(--shadow-sm) !important;
+    transform: translateY(-1px);
+    background: var(--bg-hover) !important;
+}
+
+button[data-testid="stSidebarCollapseButton"] svg {
+    fill: var(--text-primary) !important;
+    width: 18px !important;
+    height: 18px !important;
+}
+
+/* Sidebar expand button when collapsed */
+button[data-testid="stSidebarExpandButton"],
+button[data-testid="baseButton-headerNoPadding"] {
+    background: var(--bg-elevated) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: var(--radius-md) !important;
+    color: var(--text-primary) !important;
+    padding: 8px !important;
+    margin: 8px !important;
+}
+
+button[data-testid="stSidebarExpandButton"]:hover,
+button[data-testid="baseButton-headerNoPadding"]:hover {
+    border-color: var(--accent-primary) !important;
+    background: var(--bg-hover) !important;
+}
+
+button[data-testid="stSidebarExpandButton"] svg,
+button[data-testid="baseButton-headerNoPadding"] svg {
+    fill: var(--text-primary) !important;
+}
+
+/* Sidebar container */
+section[data-testid="stSidebar"] {
+    background: var(--bg-sidebar) !important;
+    border-right: 1px solid var(--border-default);
+    width: 280px !important;
+    transition: all var(--transition-base);
+}
+
+section[data-testid="stSidebar"] > div {
+    background: var(--bg-sidebar) !important;
+}
+
+section[data-testid="stSidebar"] .block-container {
+    padding: var(--space-4) var(--space-3);
+}
+
+/* Sidebar collapsed state */
+section[data-testid="stSidebar"][aria-expanded="false"] {
+    width: 0 !important;
+    min-width: 0 !important;
+}
+
+/* Sidebar sections */
+.sidebar-section {
+    margin-bottom: var(--space-6);
+}
+
+.sidebar-section-title {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0 var(--space-3);
+    margin: var(--space-6) 0 var(--space-3);
+}
+
+/* Sidebar Navigation */
+.nav-item-wrapper {
+    position: relative;
+    margin-bottom: var(--space-2);
+}
+
+.stButton>button[key^="nav_"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 0 !important;
+    z-index: 2;
+    cursor: pointer !important;
+}
+
+.nav-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-lg);
+    background: transparent;
+    border: 1px solid transparent;
+    transition: all var(--transition-base);
+    position: relative;
+    z-index: 1;
+}
+
+.nav-card:hover {
+    background: var(--bg-surface);
+    border-color: var(--border-subtle);
+}
+
+.nav-card.active {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.nav-card.active * {
+    color: white !important;
+}
+
+.nav-card.completed .step-number {
+    background: var(--accent-success-bg);
+    color: var(--accent-success);
+}
+
+/* System Health Indicator */
+.health-monitor {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    margin-top: var(--space-4);
+}
+
+.health-status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-success);
+    box-shadow: 0 0 8px var(--accent-success);
+    margin-right: var(--space-2);
+    animation: pulse 2s infinite;
+}
+
+/* Quick stats */
+.quick-stat {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.quick-stat:last-child {
+    border-bottom: none;
+}
+
+.quick-stat-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+.quick-stat-value {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+}

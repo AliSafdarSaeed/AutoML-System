@@ -1,0 +1,51 @@
+/* ========================================
+   SIDEBAR - Light Theme
+   ======================================== */
+
+section[data-testid="stSidebar"] {
+    background-color: #ffffff !important;
+    border-right: 1px solid #e0e0e0 !important;
+}
+
+section[data-testid="stSidebar"] > div {
+    background-color: #ffffff !important;
+}
+
+section[data-testid="stSidebar"] * {
+    color: #212121 !important;
+}
+
+/* Sidebar buttons */
+section[data-testid="stSidebar"] .stButton > button {
+    background-color: #1976d2 !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-weight: 500 !important;
+}
+
+section[data-testid="stSidebar"] .stButton > button[kind="secondary"] {
+    background-color: #f5f5f5 !important;
+    color: #212121 !important;
+    border: 1px solid #e0e0e0 !important;
+}
+
+/* Collapse/Expand buttons */
+button[data-testid="stSidebarCollapseButton"],
+button[data-testid="stSidebarExpandButton"] {
+    background-color: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    color: #212121 !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12) !important;
+}
+
+button[data-testid="stSidebarCollapseButton"] svg,
+button[data-testid="stSidebarExpandButton"] svg {
+    fill: #212121 !important;
+    stroke: #212121 !important;
+}
+
+button[data-testid="stSidebarCollapseButton"]:hover,
+button[data-testid="stSidebarExpandButton"]:hover {
+    background-color: #f5f5f5 !important;
+    border-color: #1976d2 !important;
+}

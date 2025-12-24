@@ -30,43 +30,35 @@ st.set_page_config(
 
 
 def load_css() -> None:
-    """Load custom CSS and apply theme class."""
-    css_file = Path(__file__).parent / "assets" / "styles.css"
-    if css_file.exists():
-        with open(css_file, encoding='utf-8') as f:
-            css = f.read()
-        
-        # Apply theme variables directly into a style block
-        theme = st.session_state.get('theme', 'dark')
-        
-        # Inject the custom CSS and the theme-specific overrides
-        st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
-        
-        if theme == 'light':
-            st.markdown("""
-            <style>
-                :root {
-                    --bg-app: #f8fafc;
-                    --bg-elevated: #ffffff;
-                    --bg-surface: #f1f5f9;
-                    --bg-hover: #e2e8f0;
-                    --bg-active: #cbd5e1;
-                    --border-subtle: rgba(0, 0, 0, 0.04);
-                    --border-default: rgba(0, 0, 0, 0.08);
-                    --border-strong: rgba(0, 0, 0, 0.12);
-                    --text-primary: #0f172a;
-                    --text-secondary: #475569;
-                    --text-muted: #64748b;
-                    --text-disabled: #94a3b8;
-                    --accent-primary: #4f46e5;
-                    --accent-primary-hover: #6366f1;
-                    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-                    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-                    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
-                    --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.1);
-                }
-            </style>
-            """, unsafe_allow_html=True)
+    """Load custom CSS and apply theme-specific styles modularly."""
+    # Get current theme
+    theme = st.session_state.get('theme', 'dark')
+    themes_dir = Path(__file__).parent / "assets" / "themes"
+    
+    # Define theme files in loading order
+    theme_files = [
+        f"{theme}_theme.css",       # Base theme & typography
+        f"{theme}_sidebar.css",     # Sidebar styling
+        f"{theme}_buttons.css",     # Buttons & interactions
+        f"{theme}_forms.css",       # Forms, inputs, file uploader
+        f"{theme}_data.css",        # Tables, tabs, expanders
+        f"{theme}_alerts.css",      # Alerts, status, progress
+        f"{theme}_components.css",  # Custom cards, metrics, badges
+        f"{theme}_charts.css"       # Plotly charts & scrollbar
+    ]
+    
+    # Load modular theme CSS files
+    combined_css = ""
+    for css_file_name in theme_files:
+        css_path = themes_dir / css_file_name
+        if css_path.exists():
+            with open(css_path, encoding='utf-8') as f:
+                combined_css += f"\n/* === {css_file_name} === */\n"
+                combined_css += f.read()
+                combined_css += "\n"
+    
+    if combined_css:
+        st.markdown(f"<style>{combined_css}</style>", unsafe_allow_html=True)
 
 
 load_css()
@@ -138,53 +130,78 @@ def get_current_step_index() -> int:
 # =============================================================================
 
 def render_sidebar() -> None:
-    """Render interactive sidebar with theme toggle and pipeline."""
+    """Render ChatGPT-inspired sidebar with collapsible navigation."""
+    
+    theme = st.session_state.get('theme', 'dark')
+    is_light = theme == 'light'
+    
+    # Dynamic colors based on theme
+    text_primary = '#0f172a' if is_light else '#f8fafc'
+    text_muted = '#64748b' if is_light else '#71717a'
+    bg_surface = '#f1f5f9' if is_light else '#1e1e26'
+    bg_hover = '#e2e8f0' if is_light else '#252530'
+    border_color = 'rgba(0, 0, 0, 0.08)' if is_light else 'rgba(255, 255, 255, 0.08)'
+    accent_primary = '#4f46e5' if is_light else '#6366f1'
+    
     with st.sidebar:
         # ===== BRAND =====
-        st.markdown("""
-        <div style="text-align: center; padding: var(--space-6) 0;">
+        st.markdown(f"""
+        <div style="text-align: center; padding: 20px 0; border-bottom: 1px solid {border_color}; margin-bottom: 16px;">
             <div style="
-                font-size: 20px;
-                font-weight: 800;
-                color: var(--text-primary);
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                background: linear-gradient(135deg, {accent_primary}, #8b5cf6);
+                border-radius: 10px;
+                margin-bottom: 8px;
+            ">
+                <span style="color: white; font-size: 18px; font-weight: 700;">A</span>
+            </div>
+            <div style="
+                font-size: 18px;
+                font-weight: 700;
+                color: {text_primary};
                 letter-spacing: -0.02em;
             ">AutoML Pro</div>
             <div style="
-                color: var(--text-muted);
+                color: {text_muted};
                 font-size: 11px;
-                margin-top: 4px;
-            ">Classification System</div>
+                margin-top: 2px;
+            ">Intelligent Classification</div>
         </div>
         """, unsafe_allow_html=True)
         
-        # ===== THEME TOGGLE =====
-        st.markdown('<div class="sidebar-section-title">Appearance</div>', unsafe_allow_html=True)
+        # ===== THEME TOGGLE - Sleek toggle button =====
+        st.markdown(f'<div style="font-size: 11px; font-weight: 600; color: {text_muted}; text-transform: uppercase; letter-spacing: 0.1em; padding: 0 12px; margin-bottom: 8px;">Theme</div>', unsafe_allow_html=True)
         
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("Light", key="theme_light", 
-                        type="primary" if st.session_state.theme == "light" else "secondary"):
+            if st.button("☀️ Light", key="theme_light", use_container_width=True,
+                        type="primary" if is_light else "secondary"):
                 st.session_state.theme = "light"
                 st.rerun()
         with col2:
-            if st.button("Dark", key="theme_dark",
-                        type="primary" if st.session_state.theme == "dark" else "secondary"):
+            if st.button("🌙 Dark", key="theme_dark", use_container_width=True,
+                        type="primary" if not is_light else "secondary"):
                 st.session_state.theme = "dark"
                 st.rerun()
         
-        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
         
-        # ===== PIPELINE STEPS =====
-        st.markdown('<div class="sidebar-section-title">Workflow</div>', unsafe_allow_html=True)
+        # ===== PIPELINE NAVIGATION - ChatGPT Style =====
+        st.markdown(f'<div style="font-size: 11px; font-weight: 600; color: {text_muted}; text-transform: uppercase; letter-spacing: 0.1em; padding: 0 12px; margin-bottom: 8px;">Workflow</div>', unsafe_allow_html=True)
         
         current_idx = get_current_step_index()
         
         for idx, step in enumerate(PIPELINE_STEPS):
             status = get_step_status(step["key"])
             is_current = idx == current_idx
-            is_disabled = False
+            is_completed = status == "completed"
             
             # Determine if step should be disabled
+            is_disabled = False
             if step["key"] == "eda" and st.session_state.df is None:
                 is_disabled = True
             elif step["key"] == "quality" and (st.session_state.df is None or st.session_state.target_col is None):
@@ -194,129 +211,194 @@ def render_sidebar() -> None:
             elif step["key"] == "report" and st.session_state.results is None:
                 is_disabled = True
             
-            # Step card classes
-            card_class = "nav-card"
-            if is_current: card_class += " active"
-            if status == "completed": card_class += " completed"
+            # Step indicator
+            if is_completed and not is_current:
+                step_indicator = "✓"
+                indicator_bg = 'rgba(34, 197, 94, 0.15)' if is_light else 'rgba(34, 197, 94, 0.2)'
+                indicator_color = '#16a34a' if is_light else '#22c55e'
+            else:
+                step_indicator = str(idx + 1)
+                if is_current:
+                    indicator_bg = 'rgba(255,255,255,0.25)'
+                    indicator_color = 'white'
+                else:
+                    indicator_bg = bg_surface
+                    indicator_color = text_muted
             
-            # Checkmark for completed steps
-            step_indicator = "✓" if status == "completed" and not is_current else str(idx + 1)
+            # Styling based on state
+            if is_current:
+                card_bg = accent_primary
+                card_border = accent_primary
+                card_text = 'white'
+                card_desc = 'rgba(255,255,255,0.8)'
+                card_shadow = f'0 4px 12px rgba(99, 102, 241, 0.4)'
+            elif is_disabled:
+                card_bg = 'transparent'
+                card_border = 'transparent'
+                card_text = text_muted
+                card_desc = text_muted
+                card_shadow = 'none'
+            else:
+                card_bg = 'transparent'
+                card_border = 'transparent'
+                card_text = text_primary
+                card_desc = text_muted
+                card_shadow = 'none'
             
-            # Combined HTML Wrapper with Invisible Button Overlay
-            st.markdown(f"""
-            <div class="nav-item-wrapper" style="opacity: {'0.5' if is_disabled else '1'};">
-                <div class="{card_class}">
-                    <div class="step-number" style="
+            # Create clickable navigation item
+            button_key = f"nav_{step['key']}"
+            
+            # Use a container for the navigation item
+            if not is_disabled:
+                if st.button(
+                    f"{step_indicator}  {step['name']}", 
+                    key=button_key, 
+                    use_container_width=True,
+                    type="primary" if is_current else "secondary",
+                    disabled=is_disabled
+                ):
+                    page_name = "EDA" if step["key"] == "eda" else step["name"]
+                    st.session_state.current_page = page_name
+                    st.rerun()
+                
+                # Add description below button
+                if is_current:
+                    st.markdown(f"""
+                    <div style="
+                        font-size: 10px; 
+                        color: {text_muted}; 
+                        padding: 0 12px 8px 12px;
+                        margin-top: -8px;
+                    ">{step['description']}</div>
+                    """, unsafe_allow_html=True)
+            else:
+                # Disabled state - show as text
+                st.markdown(f"""
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 10px 12px;
+                    border-radius: 8px;
+                    opacity: 0.4;
+                    cursor: not-allowed;
+                ">
+                    <div style="
                         width: 24px;
                         height: 24px;
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        background: {'rgba(255,255,255,0.2)' if is_current else 'var(--bg-surface)'};
+                        background: {bg_surface};
                         border-radius: 50%;
                         font-size: 11px;
-                        font-weight: 700;
+                        font-weight: 600;
+                        color: {text_muted};
                     ">{step_indicator}</div>
                     <div>
-                        <div style="font-weight: 600; font-size: 13px;">{step["name"]}</div>
-                        <div style="font-size: 11px; opacity: 0.8;">{step["description"]}</div>
+                        <div style="font-weight: 500; font-size: 13px; color: {text_muted};">{step['name']}</div>
                     </div>
                 </div>
-            """, unsafe_allow_html=True)
-            
-            if not is_disabled:
-                if st.button(f"Go to {step['name']}", key=f"nav_{step['key']}"):
-                    page_name = "EDA" if step["key"] == "eda" else step["name"]
-                    st.session_state.current_page = page_name
-                    st.rerun()
-            
-            st.markdown("</div>", unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
         
-        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
         
-        # ===== SYSTEM HEALTH =====
-        st.markdown('<div class="sidebar-section-title">System Status</div>', unsafe_allow_html=True)
+        # ===== SYSTEM STATUS - Compact =====
+        st.markdown(f'<div style="font-size: 11px; font-weight: 600; color: {text_muted}; text-transform: uppercase; letter-spacing: 0.1em; padding: 0 12px; margin-bottom: 8px;">System</div>', unsafe_allow_html=True)
         
         st.markdown(f"""
-        <div class="health-monitor">
-            <div style="display: flex; align-items: center; margin-bottom: 8px;">
-                <span class="health-status-dot"></span>
-                <span style="font-size: 13px; font-weight: 600;">System Online</span>
+        <div style="
+            background: {bg_surface};
+            border: 1px solid {border_color};
+            border-radius: 10px;
+            padding: 12px;
+            margin: 0 4px;
+        ">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="
+                    display: inline-block;
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    background: #22c55e;
+                    box-shadow: 0 0 8px #22c55e;
+                "></span>
+                <span style="font-size: 12px; font-weight: 500; color: {text_primary};">Online</span>
             </div>
-            <div style="font-size: 11px; color: var(--text-muted);">
-                AutoML Engine V2.1 is processing requests normally. High performance mode active.
+            <div style="font-size: 10px; color: {text_muted}; margin-top: 4px;">
+                AutoML Engine v2.1
             </div>
         </div>
         """, unsafe_allow_html=True)
         
-        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
         
-        st.markdown("<br>", unsafe_allow_html=True)
-        
-        # ===== QUICK STATS =====
+        # ===== QUICK STATS (if data loaded) =====
         if st.session_state.df is not None:
-            st.markdown('<div class="sidebar-section-title">Dataset</div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="font-size: 11px; font-weight: 600; color: {text_muted}; text-transform: uppercase; letter-spacing: 0.1em; padding: 0 12px; margin-bottom: 8px;">Dataset</div>', unsafe_allow_html=True)
             
             df = st.session_state.df
             
             st.markdown(f"""
             <div style="
-                background: var(--bg-surface);
-                border-radius: 8px;
+                background: {bg_surface};
+                border-radius: 10px;
                 padding: 12px;
-                border: 1px solid var(--border-default);
+                border: 1px solid {border_color};
+                margin: 0 4px;
             ">
-                <div style="font-weight: 600; color: var(--text-primary); font-size: 13px; margin-bottom: 8px;">
-                    {st.session_state.file_name}
+                <div style="font-weight: 600; color: {text_primary}; font-size: 12px; margin-bottom: 10px; word-break: break-all;">
+                    📊 {st.session_state.file_name}
                 </div>
-                <div class="quick-stat">
-                    <span class="quick-stat-label">Rows</span>
-                    <span class="quick-stat-value">{df.shape[0]:,}</span>
+                <div style="display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid {border_color};">
+                    <span style="font-size: 11px; color: {text_muted};">Rows</span>
+                    <span style="font-size: 11px; font-weight: 600; color: {text_primary};">{df.shape[0]:,}</span>
                 </div>
-                <div class="quick-stat">
-                    <span class="quick-stat-label">Columns</span>
-                    <span class="quick-stat-value">{df.shape[1]}</span>
+                <div style="display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid {border_color};">
+                    <span style="font-size: 11px; color: {text_muted};">Columns</span>
+                    <span style="font-size: 11px; font-weight: 600; color: {text_primary};">{df.shape[1]}</span>
                 </div>
-                <div class="quick-stat">
-                    <span class="quick-stat-label">Missing</span>
-                    <span class="quick-stat-value">{df.isnull().sum().sum():,}</span>
+                <div style="display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid {border_color};">
+                    <span style="font-size: 11px; color: {text_muted};">Missing</span>
+                    <span style="font-size: 11px; font-weight: 600; color: {text_primary};">{df.isnull().sum().sum():,}</span>
                 </div>
-                <div class="quick-stat">
-                    <span class="quick-stat-label">Target</span>
-                    <span class="quick-stat-value">{st.session_state.target_col or '—'}</span>
+                <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                    <span style="font-size: 11px; color: {text_muted};">Target</span>
+                    <span style="font-size: 11px; font-weight: 600; color: {accent_primary};">{st.session_state.target_col or '—'}</span>
                 </div>
             </div>
             """, unsafe_allow_html=True)
             
-            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
         
         # ===== PROGRESS =====
         completed_steps = sum(1 for step in PIPELINE_STEPS if get_step_status(step["key"]) == "completed")
         progress_pct = completed_steps / len(PIPELINE_STEPS)
         
         st.markdown(f"""
-        <div style="margin-top: auto;">
-            <div class="sidebar-section-title">Progress</div>
+        <div style="margin: 0 4px;">
+            <div style="font-size: 11px; font-weight: 600; color: {text_muted}; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Progress</div>
             <div style="
                 display: flex;
                 justify-content: space-between;
-                font-size: 12px;
-                color: var(--text-muted);
-                margin-bottom: 8px;
+                font-size: 11px;
+                color: {text_muted};
+                margin-bottom: 6px;
             ">
                 <span>{completed_steps}/{len(PIPELINE_STEPS)} steps</span>
-                <span>{int(progress_pct * 100)}%</span>
+                <span style="font-weight: 600; color: {text_primary};">{int(progress_pct * 100)}%</span>
             </div>
             <div style="
-                height: 4px;
-                background: var(--bg-surface);
-                border-radius: 4px;
+                height: 6px;
+                background: {bg_surface};
+                border-radius: 6px;
                 overflow: hidden;
             ">
                 <div style="
                     width: {progress_pct * 100}%;
                     height: 100%;
-                    background: var(--accent-primary);
+                    background: linear-gradient(90deg, {accent_primary}, #8b5cf6);
+                    border-radius: 6px;
                     transition: width 0.3s ease;
                 "></div>
             </div>
