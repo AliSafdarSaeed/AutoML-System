@@ -234,17 +234,28 @@ For testing, we recommend the following datasets:
 
 ### Streamlit Cloud Deployment
 
-1. Push your code to GitHub
-2. Navigate to [Streamlit Cloud](https://share.streamlit.io/)
-3. Connect your GitHub repository
-4. Select `main.py` as the entry point
-5. Deploy
-
 The application is currently deployed at: **[https://automl-system.streamlit.app/](https://automl-system.streamlit.app/)**
 
 ---
 
+## Screenshots
 
+### Data Ingestion Dashboard
+![Data Upload](screenshots/01_data_upload.png)
+
+### Exploratory Data Analysis
+![EDA](screenshots/02_eda.png)
+
+### Data Quality Gate
+![Quality](screenshots/03_quality.png)
+
+### Model Training & Leaderboard
+![Training](screenshots/04_training.png)
+
+### Report Generation
+![Report](screenshots/05_report.png)
+
+---
 
 ## Contributing
 
@@ -255,12 +266,6 @@ Contributions are welcome. Please follow these steps:
 3. Commit changes (`git commit -m 'Add new feature'`)
 4. Push to branch (`git push origin feature/new-feature`)
 5. Open a Pull Request
-
----
-
-## License
-
-This project is developed as part of the CS-245 Machine Learning course (Fall 2025).
 
 ---
 
