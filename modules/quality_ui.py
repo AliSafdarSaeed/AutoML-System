@@ -443,14 +443,14 @@ def page_quality() -> None:
     c1, c2, c3 = st.columns([1, 1, 1])
     
     with c1:
-        if st.button("Reset", width='stretch'):
+        if st.button("Reset", use_container_width=True):
             st.session_state.df_clean = None
             st.session_state.preprocessing_log = []
             st.session_state.preprocess_config = {}
             st.rerun()
     
     with c3:
-        if st.button("Apply", width='stretch', type="primary", disabled=not approved):
+        if st.button("Apply", use_container_width=True, type="primary", disabled=not approved):
             with st.status("Applying preprocessing...", expanded=True) as status:
                 try:
                     df_proc = df.copy()

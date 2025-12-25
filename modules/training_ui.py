@@ -121,7 +121,7 @@ def page_training() -> None:
     # Train Button
     st.markdown("<br>", unsafe_allow_html=True)
     
-    if st.button("Train Models", width='stretch', type="primary", disabled=not selected):
+    if st.button("Train Models", use_container_width=True, type="primary", disabled=not selected):
         progress = st.progress(0)
         
         with st.status("Training models...", expanded=True) as status:
@@ -163,7 +163,7 @@ def page_training() -> None:
                 'F1-Score': '{:.4f}',
                 'Training Time (s)': '{:.3f}'
             }).background_gradient(subset=['F1-Score'], cmap='Blues'),
-            width='stretch'
+            use_container_width=True
         )
         
         # Best Model Card

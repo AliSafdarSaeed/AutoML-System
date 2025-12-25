@@ -77,7 +77,7 @@ def page_report() -> None:
     trainer = st.session_state.get('trainer')
     if trainer:
         results_df = trainer.get_results_dataframe()
-        st.dataframe(results_df, width='stretch')
+        st.dataframe(results_df, use_container_width=True)
         
         best = trainer.get_best_model()
         if best:
@@ -107,7 +107,7 @@ def page_report() -> None:
     </div>
     """, unsafe_allow_html=True)
     
-    if st.button("Download PDF", width='stretch', type="primary"):
+    if st.button("Download PDF", use_container_width=True, type="primary"):
         with st.status("Generating report...", expanded=True) as status:
             try:
                 st.write("Compiling results...")
@@ -154,7 +154,7 @@ def page_report() -> None:
                     data=pdf_bytes,
                     file_name="AutoML_Evaluation_Report.pdf",
                     mime="application/pdf",
-                    width='stretch'
+                    use_container_width=True
                 )
                 
                 st.balloons()
@@ -170,7 +170,7 @@ def page_report() -> None:
     <div style="border-top: 1px solid var(--border-default); padding-top: 2rem;">
     """, unsafe_allow_html=True)
     
-    if st.button("Reset All", width='stretch'):
+    if st.button("Reset All", use_container_width=True):
         for key in list(st.session_state.keys()):
             del st.session_state[key]
         st.rerun()

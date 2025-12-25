@@ -109,7 +109,7 @@ def page_ingestion() -> None:
     render_section_header("Data Preview")
     
     with st.expander("First 10 Rows", expanded=True):
-        st.dataframe(df.head(10), width='stretch', height=350)
+        st.dataframe(df.head(10), use_container_width=True, height=350)
     
     with st.expander("Column Information"):
         col_info = pd.DataFrame({
@@ -119,7 +119,17 @@ def page_ingestion() -> None:
             'Missing': df.isnull().sum().values,
             'Unique': df.nunique().values
         })
-        st.dataframe(col_info, width='stretch')
+        st.dataframe(col_info, use_container_width=True)
+    
+    with st.expander("Summary Statistics"):
+        # Get summary statistics for numerical columns
+        numeric_df = df.select_dtypes(include=['float64', 'int64'])
+        if not numeric_df.empty:
+            summary_stats = numeric_df.describe().T
+            summary_stats = summary_stats.round(2)
+            st.dataframe(summary_stats, use_container_width=True)
+        else:
+            st.info("No numerical columns found in the dataset.")
     
     # Proceed to next step button
     render_proceed_button(
