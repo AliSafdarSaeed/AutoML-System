@@ -244,24 +244,7 @@ The application is currently deployed at: **[https://automl-system.streamlit.app
 
 ---
 
-## Screenshots
 
-### Data Ingestion Dashboard
-![Data Upload](screenshots/01_data_upload.png)
-
-### Exploratory Data Analysis
-![EDA](screenshots/02_eda.png)
-
-### Data Quality Gate
-![Quality](screenshots/03_quality.png)
-
-### Model Training & Leaderboard
-![Training](screenshots/04_training.png)
-
-### Report Generation
-![Report](screenshots/05_report.png)
-
----
 
 ## Contributing
 
