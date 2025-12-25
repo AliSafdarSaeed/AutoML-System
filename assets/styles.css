@@ -56,15 +56,16 @@
     --space-12: 48px;
 
     /* Typography */
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-    --font-size-xs: 11px;
-    --font-size-sm: 13px;
-    --font-size-base: 14px;
-    --font-size-md: 16px;
-    --font-size-lg: 18px;
-    --font-size-xl: 20px;
-    --font-size-2xl: 24px;
+--font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+--font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+--font-size-xs: 11px;
+--font-size-sm: 13px;
+--font-size-base: 14px;
+--font-size-md: 16px;
+--font-size-lg: 18px;
+--font-size-xl: 20px;
+--font-size-2xl: 24px;
+
 
     /* Border Radius */
     --radius-sm: 6px;
@@ -85,7 +86,8 @@
 }
 
 /* ===== TYPOGRAPHY ===== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 
 html,
 body,
@@ -96,8 +98,23 @@ body,
     font-size: var(--font-size-base);
     line-height: 1.6;
     color: var(--text-primary);
+    overscroll-behavior: none !important;
+    overflow-x: hidden;
+}
+/* 1. Target text specifically, rather than all elements */
+html, body, p, div:not([data-testid="stIconMaterial"]), span:not([data-testid="stIconMaterial"]), label {
+    font-family: var(--font-sans) !important;
 }
 
+/* 2. Specifically protect the sidebar toggle icon */
+button[data-testid="stSidebarCollapseButton"] span,
+button[data-testid="stSidebarExpandButton"] span {
+    font-family: 'Material Symbols Outlined' !important;
+    text-transform: none;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+}
 /* ===== GLOBAL STYLES ===== */
 .stApp {
     background: var(--bg-app);

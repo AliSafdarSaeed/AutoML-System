@@ -1,182 +1,101 @@
-/* ===== SIDEBAR - DARK THEME ===== */
+/* ===== THEME VARIABLES ===== */
+:root {
+    --bg-sidebar: #202020;
+    --bg-surface: #252530;
+    --bg-elevated: #2d2d3a;
+    --text-primary: #f8fafc;
+    --text-muted: #71717a;
+    --accent-primary: #6366f1;
+    --border-default: rgba(255, 255, 255, 0.08);
+    --border-subtle: rgba(255, 255, 255, 0.04);
+    --radius-lg: 12px;
+    --radius-xl: 20px;
+    --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+}
 
-/* Style the sidebar toggle (Hamburger) */
+/* ===== FLOATING SIDEBAR CONTAINER ===== */
+
+/* Make the base sidebar container transparent to allow the inner card to 'float' */
+section[data-testid="stSidebar"] {
+    background-color: transparent !important;
+    border-right: none !important;
+    width: 320px !important;
+}
+
+/* Style the inner div which becomes the actual floating sidebar */
+section[data-testid="stSidebar"] > div:first-child {
+    background: var(--bg-sidebar) !important;
+    /* Create the floating effect with margins */
+    margin: 16px 0px 16px 16px !important; 
+    /* Rounded corners on all sides */
+    border-radius: var(--radius-xl) !important;
+    /* Glassmorphism/Notion Border and Shadow */
+    border: 1px solid var(--border-default) !important;
+    box-shadow: var(--shadow-lg) !important;
+    /* Adjust height to account for margins */
+    height: calc(100vh - 32px) !important;
+    overflow-x: hidden !important;
+}
+
+/* Hide the default Streamlit sidebar border line */
+[data-testid="stSidebarNav"] {
+    border-bottom: none !important;
+}
+
+/* ===== COLLAPSE BUTTON CUSTOMIZATION ===== */
+
 button[data-testid="stSidebarCollapseButton"] {
     background: var(--bg-elevated) !important;
     border: 1px solid var(--border-default) !important;
-    border-radius: var(--radius-md) !important;
+    border-radius: 50% !important;
     color: var(--text-primary) !important;
-    transition: all var(--transition-fast) !important;
-    margin-left: var(--space-4) !important;
-    margin-top: var(--space-2) !important;
-    display: flex !important;
-    visibility: visible !important;
-    width: 36px !important;
-    height: 36px !important;
-    padding: 8px !important;
+    width: 32px !important;
+    height: 32px !important;
+    margin-left: 12px !important;
+    margin-top: 12px !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
 }
 
 button[data-testid="stSidebarCollapseButton"]:hover {
+    background: var(--accent-primary) !important;
     border-color: var(--accent-primary) !important;
-    box-shadow: var(--shadow-sm) !important;
-    transform: translateY(-1px);
-    background: var(--bg-hover) !important;
 }
 
-button[data-testid="stSidebarCollapseButton"] svg {
-    fill: var(--text-primary) !important;
-    width: 18px !important;
-    height: 18px !important;
-}
-
-/* Sidebar expand button when collapsed */
-button[data-testid="stSidebarExpandButton"],
-button[data-testid="baseButton-headerNoPadding"] {
-    background: var(--bg-elevated) !important;
-    border: 1px solid var(--border-default) !important;
-    border-radius: var(--radius-md) !important;
-    color: var(--text-primary) !important;
-    padding: 8px !important;
-    margin: 8px !important;
-}
-
-button[data-testid="stSidebarExpandButton"]:hover,
-button[data-testid="baseButton-headerNoPadding"]:hover {
-    border-color: var(--accent-primary) !important;
-    background: var(--bg-hover) !important;
-}
-
-button[data-testid="stSidebarExpandButton"] svg,
-button[data-testid="baseButton-headerNoPadding"] svg {
-    fill: var(--text-primary) !important;
-}
-
-/* Sidebar container */
-section[data-testid="stSidebar"] {
-    background: var(--bg-sidebar) !important;
-    border-right: 1px solid var(--border-default);
-    width: 280px !important;
-    transition: all var(--transition-base);
-}
-
-section[data-testid="stSidebar"] > div {
-    background: var(--bg-sidebar) !important;
-}
+/* ===== INTERNAL CONTENT STYLING ===== */
 
 section[data-testid="stSidebar"] .block-container {
-    padding: var(--space-4) var(--space-3);
+    padding: 24px 16px !important;
 }
 
-/* Sidebar collapsed state */
-section[data-testid="stSidebar"][aria-expanded="false"] {
-    width: 0 !important;
-    min-width: 0 !important;
+/* Custom Scrollbar for the floating card */
+section[data-testid="stSidebar"] > div:first-child::-webkit-scrollbar {
+    width: 4px;
 }
 
-/* Sidebar sections */
-.sidebar-section {
-    margin-bottom: var(--space-6);
+section[data-testid="stSidebar"] > div:first-child::-webkit-scrollbar-thumb {
+    background: var(--border-default);
+    border-radius: 10px;
 }
 
-.sidebar-section-title {
-    font-size: var(--font-size-xs);
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 0 var(--space-3);
-    margin: var(--space-6) 0 var(--space-3);
+/* Navigation Item Styling */
+.stButton > button {
+    border-radius: var(--radius-lg) !important;
+    border: 1px solid transparent !important;
+    transition: all 0.2s ease !important;
 }
 
-/* Sidebar Navigation */
-.nav-item-wrapper {
-    position: relative;
-    margin-bottom: var(--space-2);
+.stButton > button:hover {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-subtle) !important;
 }
 
-.stButton>button[key^="nav_"] {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100% !important;
-    height: 100% !important;
-    opacity: 0 !important;
-    z-index: 2;
-    cursor: pointer !important;
+/* Active State for Navigation */
+.stButton > button[kind="primary"] {
+    background: var(--accent-primary) !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
 }
 
-.nav-card {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3) var(--space-4);
-    border-radius: var(--radius-lg);
-    background: transparent;
-    border: 1px solid transparent;
-    transition: all var(--transition-base);
-    position: relative;
-    z-index: 1;
-}
-
-.nav-card:hover {
-    background: var(--bg-surface);
-    border-color: var(--border-subtle);
-}
-
-.nav-card.active {
-    background: var(--accent-primary);
-    border-color: var(--accent-primary);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-}
-
-.nav-card.active * {
-    color: white !important;
-}
-
-.nav-card.completed .step-number {
-    background: var(--accent-success-bg);
-    color: var(--accent-success);
-}
-
-/* System Health Indicator */
-.health-monitor {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-lg);
-    padding: var(--space-4);
-    margin-top: var(--space-4);
-}
-
-.health-status-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent-success);
-    box-shadow: 0 0 8px var(--accent-success);
-    margin-right: var(--space-2);
-    animation: pulse 2s infinite;
-}
-
-/* Quick stats */
-.quick-stat {
-    display: flex;
-    justify-content: space-between;
-    padding: var(--space-2) var(--space-3);
-    border-bottom: 1px solid var(--border-subtle);
-}
-
-.quick-stat:last-child {
-    border-bottom: none;
-}
-
-.quick-stat-label {
-    font-size: var(--font-size-sm);
-    color: var(--text-muted);
-}
-
-.quick-stat-value {
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    color: var(--text-primary);
+/* Progress Bar Tweaks */
+.stProgress > div > div > div > div {
+    background-color: var(--accent-primary) !important;
 }

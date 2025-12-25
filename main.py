@@ -130,18 +130,15 @@ def get_current_step_index() -> int:
 # =============================================================================
 
 def render_sidebar() -> None:
-    """Render ChatGPT-inspired sidebar with collapsible navigation."""
+    """Render ChatGPT-inspired sidebar with dark-only navigation."""
     
-    theme = st.session_state.get('theme', 'dark')
-    is_light = theme == 'light'
-    
-    # Dynamic colors based on theme
-    text_primary = '#0f172a' if is_light else '#f8fafc'
-    text_muted = '#64748b' if is_light else '#71717a'
-    bg_surface = '#f1f5f9' if is_light else '#1e1e26'
-    bg_hover = '#e2e8f0' if is_light else '#252530'
-    border_color = 'rgba(0, 0, 0, 0.08)' if is_light else 'rgba(255, 255, 255, 0.08)'
-    accent_primary = '#4f46e5' if is_light else '#6366f1'
+    # Static Dark Theme Colors
+    text_primary = '#f8fafc'
+    text_muted = '#71717a'
+    bg_surface = '#1e1e26'
+    bg_hover = '#252530'
+    border_color = 'rgba(255, 255, 255, 0.08)'
+    accent_primary = '#6366f1'
     
     with st.sidebar:
         # ===== BRAND =====
@@ -173,23 +170,6 @@ def render_sidebar() -> None:
         </div>
         """, unsafe_allow_html=True)
         
-        # ===== THEME TOGGLE - Sleek toggle button =====
-        st.markdown(f'<div style="font-size: 11px; font-weight: 600; color: {text_muted}; text-transform: uppercase; letter-spacing: 0.1em; padding: 0 12px; margin-bottom: 8px;">Theme</div>', unsafe_allow_html=True)
-        
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button("☀️ Light", key="theme_light", use_container_width=True,
-                        type="primary" if is_light else "secondary"):
-                st.session_state.theme = "light"
-                st.rerun()
-        with col2:
-            if st.button("🌙 Dark", key="theme_dark", use_container_width=True,
-                        type="primary" if not is_light else "secondary"):
-                st.session_state.theme = "dark"
-                st.rerun()
-        
-        st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
-        
         # ===== PIPELINE NAVIGATION - ChatGPT Style =====
         st.markdown(f'<div style="font-size: 11px; font-weight: 600; color: {text_muted}; text-transform: uppercase; letter-spacing: 0.1em; padding: 0 12px; margin-bottom: 8px;">Workflow</div>', unsafe_allow_html=True)
         
@@ -214,8 +194,8 @@ def render_sidebar() -> None:
             # Step indicator
             if is_completed and not is_current:
                 step_indicator = "✓"
-                indicator_bg = 'rgba(34, 197, 94, 0.15)' if is_light else 'rgba(34, 197, 94, 0.2)'
-                indicator_color = '#16a34a' if is_light else '#22c55e'
+                indicator_bg = 'rgba(34, 197, 94, 0.2)'
+                indicator_color = '#22c55e'
             else:
                 step_indicator = str(idx + 1)
                 if is_current:
@@ -225,33 +205,12 @@ def render_sidebar() -> None:
                     indicator_bg = bg_surface
                     indicator_color = text_muted
             
-            # Styling based on state
-            if is_current:
-                card_bg = accent_primary
-                card_border = accent_primary
-                card_text = 'white'
-                card_desc = 'rgba(255,255,255,0.8)'
-                card_shadow = f'0 4px 12px rgba(99, 102, 241, 0.4)'
-            elif is_disabled:
-                card_bg = 'transparent'
-                card_border = 'transparent'
-                card_text = text_muted
-                card_desc = text_muted
-                card_shadow = 'none'
-            else:
-                card_bg = 'transparent'
-                card_border = 'transparent'
-                card_text = text_primary
-                card_desc = text_muted
-                card_shadow = 'none'
-            
             # Create clickable navigation item
             button_key = f"nav_{step['key']}"
             
-            # Use a container for the navigation item
             if not is_disabled:
                 if st.button(
-                    f"{step_indicator}  {step['name']}", 
+                    f"{step_indicator}   {step['name']}", 
                     key=button_key, 
                     use_container_width=True,
                     type="primary" if is_current else "secondary",
@@ -261,7 +220,7 @@ def render_sidebar() -> None:
                     st.session_state.current_page = page_name
                     st.rerun()
                 
-                # Add description below button
+                # Add description below button for active step
                 if is_current:
                     st.markdown(f"""
                     <div style="
@@ -303,7 +262,7 @@ def render_sidebar() -> None:
         
         st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
         
-        # ===== SYSTEM STATUS - Compact =====
+        # ===== SYSTEM STATUS =====
         st.markdown(f'<div style="font-size: 11px; font-weight: 600; color: {text_muted}; text-transform: uppercase; letter-spacing: 0.1em; padding: 0 12px; margin-bottom: 8px;">System</div>', unsafe_allow_html=True)
         
         st.markdown(f"""
@@ -404,11 +363,7 @@ def render_sidebar() -> None:
             </div>
         </div>
         """, unsafe_allow_html=True)
-
-
 render_sidebar()
-
-
 # =============================================================================
 # MAIN APP ROUTING
 # =============================================================================
