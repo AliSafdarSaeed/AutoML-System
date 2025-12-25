@@ -115,6 +115,7 @@ button[data-testid="stSidebarExpandButton"] span {
     white-space: nowrap;
     direction: ltr;
 }
+
 /* ===== GLOBAL STYLES ===== */
 .stApp {
     background: var(--bg-app);
